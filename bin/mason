@@ -1,0 +1,6 @@
+#!/bin/sh
+
+BASE=`dirname $0`/../src
+BASE=`(cd "$BASE"; pwd)`
+MAIN="${BASE}/mason.rb"
+/usr/bin/ruby "${MAIN}" $*;
