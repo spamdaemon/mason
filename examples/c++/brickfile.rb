@@ -18,10 +18,6 @@ end
 
 depends 'objects/%.o' => 'brickfile.rb' 
 
-rule :objectFiles => :objects do
-  |p,n|
-  Dependency.create n[0]
-end
 
 # this rule builds an object file from a source file
 rule 'objects/%.o' => 'src/{1}.cpp' do
@@ -33,7 +29,9 @@ rule 'objects/%.o' => 'src/{1}.cpp' do
 end
 
 # rule to build the main executable from the objects
-rule 'main' => :objectFiles do
+# we use the dependency_of metadependency, which will 
+# treat the out of the objects target as dependencies
+rule 'main' => dependency_of(:objects) do
 |p, n|
   echo "Linking #{n.flatten.join(' ')}"
   shell "g++ -o #{p} #{n.flatten.join(' ')}"

@@ -63,6 +63,22 @@ class OptionalDependencySpec < Spec
 
 end
 
+class MakeDependencySpec < Spec
+
+  def find_variables (context, dependency)
+    return [];
+  end
+
+  def matches (context, dependency)
+    dependency.is_a? MakeDependency
+  end
+
+  def to_s
+    "MDSpec"
+  end
+end
+
+
 
 class GenericSpec < Spec
 
@@ -208,6 +224,7 @@ class FileSpec < GenericSpec
   end
 
 end
+
 
 class TargetSpec < GenericSpec
 

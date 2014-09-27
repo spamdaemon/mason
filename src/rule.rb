@@ -146,8 +146,40 @@ class TargetRule < Rule
 
   def apply (produces, needs, context)
     # invoke the build function to create the dependency
-    _result context.make_target produces.target
+    _result= context.make_target produces.target
     $logger.info "MAKE TARGET #{produces} => #{_result}"
+    _result
+  end
+
+end
+
+# target rule is a singleton; use TargetRule.instance to access it
+class MakeDependencyRule < Rule
+
+  def initialize
+    @spec = MakeDependencySpec.new
+  end
+
+  @@instance = MakeDependencyRule.new
+
+  def self.instance
+    @@instance
+  end
+
+  private_class_method :new
+
+  def spec
+    @spec
+  end
+
+  def apply (produces, needs, context)
+    # invoke the build function to create the dependency
+    _dep = Dependency.create(produces.target)
+
+    _result= context.make(_dep)
+    _result= Dependency.create(_result)
+    $logger.info "CREATE Dependecy #{produces} => #{_result}"
+    _result
   end
 
 end

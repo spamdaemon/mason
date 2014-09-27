@@ -8,7 +8,7 @@ class Dependency
   # @param value the value
   # @return true if the value matches this dependency, false otherwise
   def validate (context, value)
-    true;
+    true
   end
 
   def get_product
@@ -42,7 +42,8 @@ class Dependency
       _result = _n.is_newer_than(_p)
       if _result.nil? then
         # interpret a nil as an out-of-date condition
-        _result = true;
+        $logger.debug("Cannot determine if #{_p} older than #{_n}")
+        _result = true
       end
       if _result then
         $logger.debug("#{_p} is older than #{_n}")
@@ -75,20 +76,21 @@ class Dependency
 
   def self.create (param)
 
+    $logger.info("Create dependency class #{param.class.name} : #{param}");
     if param.is_a? Array then
       return Dependencies.new (param.uniq.collect { |v| Dependency.create v })
     end
 
     if param.is_a? Dependency then
-      return param;
+      return param
     end
 
     if param.instance_of? String then
-      return FileDependency.new param;
+      return FileDependency.new param
     end
 
     if param.instance_of? Symbol then
-      return TargetDependency.new param;
+      return TargetDependency.new param
     end
 
     raise "Failed to create a dependency for #{param} of type #{param.class}"
@@ -98,7 +100,7 @@ end
 
 class GenericDependency < Dependency
 
-  attr_reader :value;
+  attr_reader :value
 
   def initialize (hashable)
     @value = hashable
@@ -243,6 +245,24 @@ class TargetDependency < GenericDependency
   end
 end
 
+class MakeDependency < GenericDependency
+
+
+  def initialize (target)
+    super(target)
+  end
+
+  alias_method :target, :value
+
+  def to_s
+    "MDep:#{target}"
+  end
+end
+
 def optional(d)
   OptionalDependency.new(Dependency.create d)
+end
+
+def dependency_of(d)
+  MakeDependency.new(Dependency.create(d))
 end

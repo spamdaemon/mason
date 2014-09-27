@@ -12,6 +12,7 @@ class MasonProject < Project
     add_default_rule :make_optional, MakeOptionalDependency.instance
     add_default_rule :check_file_exists, CheckFileExists.instance
     add_default_rule :make_dependencies, MakeDependencies.instance
+    add_default_rule :as_dependency, MakeDependencyRule.instance
 
     # maven dependencies are added by default
     add_default_rule :maven_fetch, MavenFetch.instance
