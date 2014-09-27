@@ -136,11 +136,11 @@ end
 
 class OptionalDependency < GenericDependency
 
-  def initialize (dependency)
-    if dependency.is_a? OptionalDependency then
-      dependency = dependency.dependency
+  def initialize (dep)
+    if dep.is_a? OptionalDependency then
+      dep = dep.dependency
     end
-    super(dependency)
+    super(Dependency.create(dep))
   end
 
   alias_method :dependency, :value
@@ -247,22 +247,14 @@ end
 
 class MakeDependency < GenericDependency
 
-
-  def initialize (target)
-    super(target)
+  def initialize (dep)
+    super(Dependency.create(dep))
   end
 
-  alias_method :target, :value
+  alias_method :dependency, :value
 
   def to_s
-    "MDep:#{target}"
+    "MDep:#{dependency}"
   end
 end
 
-def optional(d)
-  OptionalDependency.new(Dependency.create d)
-end
-
-def dependency_of(d)
-  MakeDependency.new(Dependency.create(d))
-end

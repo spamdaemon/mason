@@ -51,32 +51,6 @@ class Spec
 
 end
 
-class OptionalDependencySpec < Spec
-  def matches (context, dependency)
-    dependency.is_a? OptionalDependency
-  end
-
-  def find_variables (context, dependency)
-    []
-  end
-
-
-end
-
-class MakeDependencySpec < Spec
-
-  def find_variables (context, dependency)
-    return [];
-  end
-
-  def matches (context, dependency)
-    dependency.is_a? MakeDependency
-  end
-
-  def to_s
-    "MDSpec"
-  end
-end
 
 
 
@@ -226,6 +200,7 @@ class FileSpec < GenericSpec
 end
 
 
+
 class TargetSpec < GenericSpec
 
   def initialize (target)
@@ -283,5 +258,59 @@ class DependencySpec < GenericSpec
   def to_s
     "DepSpec:#{dependency}"
   end
+end
+
+class WrapperSpec < GenericSpec 
+
+  def initialize (clazz, dep)
+    super(Spec.create(dep))
+    @class = clazz;
+  end
+
+  alias_method :dependency, :value
+
+  def create_dependency(dep)
+    @class.new(dep)
+  end
+
+  def compatible? (dep)
+    dep.is_a? @class
+  end
+
+  # turn a dependency spec into an actual dependency
+  def to_dependency (context, product, variables)
+    _dependency = dependency.to_dependency(context,product,variables)
+    create_dependency(_dependency)
+  end
+
+  def find_variables (context, dep)
+    dependency.find_variables(context,dep)
+  end
+
+  def matches (context, dep)
+    compatible?(dep) && (dependency.matches(context,dep.dependency))
+  end
+end
+
+class MakeDependencySpec < WrapperSpec
+
+  def initialize (dep)
+    super(MakeDependency,dep)
+  end
+end
+
+class OptionalDependencySpec < GenericSpec
+
+  def initialize (dep)
+    super(OptionalDependency,dep)
+  end
+end
+
+def dependency_of(d)
+  MakeDependencySpec.new(d)
+end
+
+def optional(d)
+  OptionalSpec.new(d)
 end
 

@@ -67,41 +67,6 @@ class GeneralRule < Rule
 end
 
 
-class MakeOptionalDependency < Rule
-
-
-  def initialize
-    @produces = OptionalDependencySpec.new
-  end
-
-  def dependencies
-    []
-  end
-
-  def spec
-    @produces
-  end
-
-  def apply (produces, needs, context)
-    _result = nil
-    begin
-      _result= context.make(produces.dependency)
-    rescue
-      $logger.warn("Dependency #{produces} is optional");
-    end
-    _result
-  end
-
-  @@instance = MakeOptionalDependency.new
-
-  def self.instance
-    @@instance
-  end
-
-  private_class_method :new
-end
-
-
 class CheckFileExists < GeneralRule
 
   def initialize
@@ -153,11 +118,76 @@ class TargetRule < Rule
 
 end
 
+class MakeOptionalDependency < Rule
+
+  class TheSpec < Spec
+    
+    def find_variables (context, dependency)
+      []
+    end
+    
+    def matches (context, dependency)
+      dependency.is_a? OptionalDependency
+    end
+    
+    def to_s
+      "Optional"
+    end
+  end
+
+  def initialize
+    @produces = TheSpec.new
+  end
+
+  def dependencies
+    []
+  end
+
+  def spec
+    @produces
+  end
+
+  def apply (produces, needs, context)
+    _result = nil
+    begin
+      _result= context.make(produces.dependency)
+    rescue
+      $logger.warn("Dependency #{produces} is optional");
+    end
+    _result
+  end
+
+  @@instance = MakeOptionalDependency.new
+
+  def self.instance
+    @@instance
+  end
+
+  private_class_method :new
+end
+
+
 # target rule is a singleton; use TargetRule.instance to access it
 class MakeDependencyRule < Rule
 
+  class TheSpec < Spec
+
+    def find_variables (context, dependency)
+      return [];
+    end
+
+    def matches (context, dependency)
+      dependency.is_a? MakeDependency
+    end
+
+    def to_s
+      "MDSpec"
+    end
+  end
+  
+
   def initialize
-    @spec = MakeDependencySpec.new
+    @spec = TheSpec.new
   end
 
   @@instance = MakeDependencyRule.new
@@ -174,7 +204,7 @@ class MakeDependencyRule < Rule
 
   def apply (produces, needs, context)
     # invoke the build function to create the dependency
-    _dep = Dependency.create(produces.target)
+    _dep = Dependency.create(produces.dependency)
 
     _result= context.make(_dep)
     _result= Dependency.create(_result)
