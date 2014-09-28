@@ -7,7 +7,7 @@ A simple make replacement written in Ruby
 Motiviation
 ===========
 
-At this momement, this is a just prototype to sketch out some ideas I've been having regarding how I want to build. I still believe that the original make or gnumake are the best approach for building software, but they have some obvious drawbacks as we all know. Newer replacements like ant or maven are very successful, but I find their declarative approach too constrained. 
+At this momement, this is just a prototype to sketch out some ideas I've had regarding how I want to build. I still believe that the original make or gnumake are the best approach for building software, but they have some obvious drawbacks, as we all know. Newer replacements like ant or maven are very successful, but I find their declarative approach too constrained. 
 So, I thought, let's see if I can't build a protoype in Ruby, so I can swat to birds with one stone: figure out how hard it actually is build a decent make replacement, and learn Ruby at the same time.
 
 Here is a simple example of building with a bunch of C sources with gcc on a Linux system. 
