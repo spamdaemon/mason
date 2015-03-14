@@ -145,6 +145,7 @@ class FileSpec < GenericSpec
       # turn the file into a regular expression by replacing
       # each % with "(.+)"
       _regexp = file.gsub('.', "\\.")
+      # use named captures instead : (<name>regex) will yield a match  { name => ... }
       _regexp = _regexp.gsub(/([^%]|^)%/,"\\1(.+)")
       _regexp = "^#{_regexp}$"
       _compiled = Regexp.compile(_regexp)
