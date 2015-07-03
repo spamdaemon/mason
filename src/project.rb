@@ -369,7 +369,7 @@ class Project
      @additional_dependencies.each do |spec,deps|
       if spec.matches(self,dependency) then
         $logger.debug("Adding additional dependencies for #{dependency} : #{deps.size}")
-        _result.concat(resolve_specs dependency, spec, deps)
+        _result.concat(resolve_specs( dependency, spec, deps))
       end
     end
     _result

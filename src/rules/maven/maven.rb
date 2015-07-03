@@ -38,7 +38,7 @@ module Maven
     _response = _http.request(_request) do |response|
       if  response.is_a? Net::HTTPOK then
         if _file.nil? then
-          FileUtils.mkdir_p (File.dirname _dest)
+          FileUtils.mkdir_p(File.dirname(_dest))
           _file = File.new _dest, 'w'
         end
         response.read_body _file
@@ -52,8 +52,8 @@ module Maven
 
     if _response.is_a? Net::HTTPOK then
       artifact
-    elsif _response.is_a? (Net::HTTPRedirection) then
-      $logger.info "Redirect to #{_response['location']}"
+    elsif _response.is_a?(Net::HTTPRedirection) then
+      $logger.info("Redirect to #{_response['location']}")
       uri = URI(_response['location'])
       # because of the way things may be represented in the URI, we can only rely on the version, packaging
       _parsedArtifact = parse_artifact_from_uri(uri)

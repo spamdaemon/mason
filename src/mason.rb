@@ -52,15 +52,15 @@ end
 $logger.level = Logger::WARN
 
 project = MasonProject.new
-project.instance_eval (File.read _brickfile), _brickfile
+project.instance_eval(File.read(_brickfile), _brickfile)
 
 
 begin
   if ARGV.empty? then
-    project.make (TargetDependency.new :Make)
-    project.make (TargetDependency.new :Clean)
+    project.make(TargetDependency.new(:Make))
+    project.make(TargetDependency.new(:Clean))
   else
-    ARGV.each { |target| $logger.info (project.make (TargetDependency.new target.to_sym)) }
+    ARGV.each { |target| $logger.info(project.make(TargetDependency.new(target.to_sym))) }
   end
 rescue Exception => e
  puts e.message

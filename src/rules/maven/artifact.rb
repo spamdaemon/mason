@@ -167,7 +167,7 @@ class MavenResolve < Rule
         end
       end
 
-    Dependencies.create (_result.uniq())
+    Dependencies.create(_result.uniq())
   end
 
   @@instance = MavenResolve.new

@@ -23,11 +23,11 @@ class Spec
   def self.create (param)
 
     if param.is_a? Dependency then
-      return DependencySpec.new param
+      return DependencySpec.new(param)
     end
 
     if param.is_a? Proc then
-      return FunctionalSpec.new param
+      return FunctionalSpec.new(param)
     end
 
     if param.is_a? Spec then
@@ -35,15 +35,15 @@ class Spec
     end
 
     if param.instance_of? String then
-      return FileSpec.new param
+      return FileSpec.new(param)
     end
 
     if param.instance_of? Regexp then
-      return FileSpec.new param
+      return FileSpec.new(param)
     end
 
     if param.instance_of? Symbol then
-      return TargetSpec.new param
+      return TargetSpec.new(param)
     end
 
     raise "Failed to create a spec for #{param}"
@@ -186,7 +186,7 @@ class FileSpec < GenericSpec
       end
 
       if file.is_a? Regexp then
-        return file.match dependency.file
+        return file.match(dependency.file)
       else
         return file == dependency.file
       end

@@ -59,7 +59,7 @@ rule product => dependencies do
 end
 ```
 
-On the left-hand side of a rule is the product specification (spec). The product spec defines what it is that the rule will build. A spec can be a string or a regular expression, both of which are interpreted as filenames, or it can be a symbol, which is termed a target. More a complex specs are also possible by creating your own Spec implementation, but more on that later.
+On the left-hand side of a rule is the product specification (spec). The product spec defines what it is that the rule will build. A spec can be a string or a regular expression, both of which are interpreted as filenames, or it can be a symbol, which is termed a target. More complex specs are also possible by creating your own Spec implementation, but more on that later.
 
 On the right-hand side of a rule we have the dependencies, which are specs of the products that are required by the rule before it can be applied. There can be more than one dependency.
 

@@ -2,7 +2,7 @@ require_relative 'logger'
 require 'fileutils'
 
 def make_string (*args)
-  args.flatten.join (' ')
+  args.flatten.join(' ')
 end
 
 def rm (*files)

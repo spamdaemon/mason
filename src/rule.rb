@@ -70,13 +70,13 @@ end
 class CheckFileExists < GeneralRule
 
   def initialize
-    super (FileSpec.new nil), nil, Proc.new { |produces, needs, context|
+    super( FileSpec.new(nil), nil, Proc.new { |produces, needs, context|
       if File.exists? produces.file then
         produces.file
       else
-        raise "File does not exist #{produces.file}"
+        raise("File does not exist #{produces.file}")
       end
-    }
+    })
   end
 
   @@instance = CheckFileExists.new

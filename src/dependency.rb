@@ -78,7 +78,7 @@ class Dependency
 
     $logger.info("Create dependency class #{param.class.name} : #{param}");
     if param.is_a? Array then
-      return Dependencies.new (param.uniq.collect { |v| Dependency.create v })
+      return Dependencies.new(param.uniq.collect { |v| Dependency.create v })
     end
 
     if param.is_a? Dependency then
@@ -86,11 +86,11 @@ class Dependency
     end
 
     if param.instance_of? String then
-      return FileDependency.new param
+      return FileDependency.new(param)
     end
 
     if param.instance_of? Symbol then
-      return TargetDependency.new param
+      return TargetDependency.new(param)
     end
 
     raise "Failed to create a dependency for #{param} of type #{param.class}"
@@ -196,7 +196,7 @@ class FileDependency < GenericDependency
   alias_method :file, :value
 
   def directory
-    return File.dirname file
+    return File.dirname(file)
   end
 
   def validate (context, value)
@@ -205,7 +205,7 @@ class FileDependency < GenericDependency
   end
 
   def exists (context)
-    return File.file? file
+    return File.file?(file)
   end
 
   def older_than (date)
